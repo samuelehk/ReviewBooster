@@ -51,7 +51,7 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
 <!-- ─────────────────  HERO  ───────────────── -->
 <section class="relative overflow-hidden">
   <!-- Background: mappa stile Google Maps densa -->
-  <div class="absolute inset-0 -z-10" aria-hidden="true">
+  <div class="absolute inset-0 z-0" aria-hidden="true">
     <?php render_map_bg(); ?>
     <!-- Overlay leggero solo nei punti del testo per leggibilità (NON copre la mappa) -->
     <div class="absolute inset-0" style="background: radial-gradient(ellipse 70% 55% at 50% 35%, rgba(255,255,255,.55) 0%, rgba(255,255,255,.25) 50%, transparent 80%), linear-gradient(180deg, transparent 60%, rgba(255,255,255,.4) 85%, #fff 100%);"></div>
@@ -60,14 +60,14 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
   </div>
 
   <!-- decorative stars sparse -->
-  <div class="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden z-[1]">
     <span class="stars twinkle absolute text-2xl" style="top:18%; left:8%;">★</span>
     <span class="stars twinkle absolute text-lg" style="top:32%; right:12%;">★</span>
     <span class="stars twinkle absolute text-3xl opacity-60" style="top:58%; left:5%;">★</span>
     <span class="stars twinkle absolute text-xl opacity-50" style="top:12%; right:25%;">★</span>
   </div>
 
-  <div class="max-w-6xl mx-auto px-6 pt-16 pb-12 md:pt-24 md:pb-16 text-center relative">
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-12 md:pt-24 md:pb-16 text-center relative z-10">
     <span class="chip rise d1"><span class="dot"></span> Operativo per oltre 200 centri in Italia</span>
 
     <h1 class="h-display mt-7 text-5xl sm:text-6xl md:text-7xl lg:text-[5.4rem] max-w-4xl mx-auto rise d2 leading-[1.02]">
