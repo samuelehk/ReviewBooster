@@ -4,15 +4,64 @@ require __DIR__ . '/includes/layout.php';
 layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
 ?>
 
+<style>
+  /* Stelle che brillano */
+  @keyframes twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .7; transform: scale(1.08); } }
+  .twinkle { animation: twinkle 2.4s ease-in-out infinite; }
+  .twinkle:nth-child(2) { animation-delay: .3s; }
+  .twinkle:nth-child(3) { animation-delay: .6s; }
+  .twinkle:nth-child(4) { animation-delay: .9s; }
+  .twinkle:nth-child(5) { animation-delay: 1.2s; }
+
+  /* Marquee live recensioni */
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee { display: flex; gap: 1rem; animation: marquee 50s linear infinite; width: max-content; }
+  .marquee-pause:hover .marquee { animation-play-state: paused; }
+
+  /* Pulse del badge "+1 recensione" */
+  @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(15,142,92,.55); } 70% { box-shadow: 0 0 0 14px rgba(15,142,92,0); } 100% { box-shadow: 0 0 0 0 rgba(15,142,92,0); } }
+  .pulse-ring { animation: pulseRing 2.5s infinite; }
+
+  /* Conta-numeri "salita" */
+  @keyframes countUp { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* Linea collegamento card */
+  .arrow-deco { stroke-dasharray: 4 4; }
+
+  /* Mockup di Google Maps card */
+  .gmaps-card { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+  .gmaps-card .photo {
+    height: 130px;
+    background:
+      linear-gradient(135deg, rgba(15,142,92,.0), rgba(15,142,92,.0)),
+      linear-gradient(180deg, #c8d8c8 0%, #b3c9b8 100%);
+    position: relative; overflow: hidden;
+  }
+  .gmaps-card.before .photo { background: linear-gradient(180deg, #d4d4d4 0%, #b8b8b8 100%); filter: grayscale(.4); }
+  .gmaps-card.after .photo { background: linear-gradient(180deg, #d8e9d4 0%, #b1d3a8 100%); }
+
+  /* Pin Google */
+  .gmaps-pin {
+    position: absolute; left: 50%; top: 55%; transform: translate(-50%, -50%);
+    width: 36px; height: 48px;
+  }
+</style>
+
 <!-- ─────────────────  HERO  ───────────────── -->
 <section class="relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-b from-sage to-white -z-10"></div>
-  <div class="absolute inset-x-0 top-0 h-full -z-10" style="background-image: radial-gradient(60% 50% at 80% 0%, rgba(15,142,92,.10), transparent 60%);"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-sage via-white to-white -z-10"></div>
+  <div class="absolute inset-x-0 top-0 h-[500px] -z-10 opacity-60" style="background-image: radial-gradient(50% 60% at 80% 0%, rgba(15,142,92,.18), transparent 70%), radial-gradient(40% 50% at 15% 30%, rgba(244,196,0,.12), transparent 70%);"></div>
 
-  <div class="max-w-6xl mx-auto px-6 pt-16 pb-20 md:pt-24 md:pb-28 text-center">
-    <div class="inline-flex flex-col items-center gap-6 rise d1">
-      <span class="chip"><span class="dot"></span> Operativo per oltre 200 centri in Italia</span>
-    </div>
+  <!-- decorative stars sparse -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+    <span class="stars twinkle absolute text-2xl" style="top:18%; left:8%;">★</span>
+    <span class="stars twinkle absolute text-lg" style="top:32%; right:12%;">★</span>
+    <span class="stars twinkle absolute text-3xl opacity-60" style="top:58%; left:5%;">★</span>
+    <span class="stars twinkle absolute text-xl opacity-50" style="top:12%; right:25%;">★</span>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 pt-16 pb-12 md:pt-24 md:pb-16 text-center relative">
+    <span class="chip rise d1"><span class="dot"></span> Operativo per oltre 200 centri in Italia</span>
 
     <h1 class="h-display mt-7 text-5xl sm:text-6xl md:text-7xl lg:text-[5.4rem] max-w-4xl mx-auto rise d2">
       Più recensioni Google.<br>
@@ -28,13 +77,13 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372a1.125 1.125 0 00-.852-1.091l-4.423-1.106a1.125 1.125 0 00-1.173.417l-.97 1.293a.75.75 0 01-.93.225 12.75 12.75 0 01-5.586-5.586.75.75 0 01.225-.93l1.293-.97a1.125 1.125 0 00.417-1.173L7.345 4.852A1.125 1.125 0 006.255 4H4.875A2.625 2.625 0 002.25 6.625v.125z"/></svg>
         Inizia 14 giorni gratis
       </a>
-      <a href="#come-funziona" class="btn-secondary">Guarda come funziona</a>
+      <a href="#prima-dopo" class="btn-secondary">Guarda il prima/dopo</a>
     </div>
 
-    <div class="mt-8 flex items-center justify-center gap-6 text-sm text-muted rise d5">
+    <div class="mt-7 flex items-center justify-center gap-6 text-sm text-muted rise d5">
       <span class="flex items-center gap-2">
         <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-        Carta richiesta solo all'attivazione
+        Carta solo all'attivazione
       </span>
       <span class="flex items-center gap-2">
         <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
@@ -43,8 +92,14 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
     </div>
   </div>
 
-  <!-- Mock prodotto -->
-  <div class="max-w-5xl mx-auto px-6 pb-16 rise d6">
+  <!-- Hero mockup prodotto -->
+  <div class="max-w-5xl mx-auto px-6 pb-16 rise d6 relative">
+    <!-- Badge "+1 recensione" floating -->
+    <div class="absolute -top-2 right-2 md:right-12 z-10 hidden sm:flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-line shadow-lift pulse-ring">
+      <span class="grid place-items-center w-6 h-6 rounded-full bg-primary-500 text-white text-xs">★</span>
+      <span class="text-xs font-semibold">+1 recensione 5★ · ora</span>
+    </div>
+
     <div class="bg-white rounded-2xl border border-line shadow-lift overflow-hidden">
       <div class="px-5 py-3 border-b border-line bg-bone flex items-center gap-3">
         <div class="flex gap-1.5">
@@ -55,7 +110,6 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
         <div class="flex-1 text-center text-xs text-muted font-medium">app.reviewboost.it · Centro Estetico Bellezza</div>
       </div>
       <div class="grid md:grid-cols-3 gap-5 p-6">
-        <!-- Stat -->
         <div class="bg-mint rounded-xl p-5 border border-primary-100">
           <div class="text-xs font-semibold uppercase tracking-wider text-primary-700">Recensioni questo mese</div>
           <div class="mt-2 flex items-baseline gap-2">
@@ -85,7 +139,6 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
           <div class="text-xs text-muted mt-3"><span class="text-primary-600 font-semibold">3 contattati</span> · 4 da fare</div>
         </div>
       </div>
-      <!-- Lista clienti -->
       <div class="border-t border-line">
         <div class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-muted bg-bone border-b border-line">Clienti di oggi</div>
         <?php
@@ -118,8 +171,308 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
   </div>
 </section>
 
+<!-- ─────────────────  MARQUEE LIVE RECENSIONI  ───────────────── -->
+<section class="border-y border-line bg-bone py-5 marquee-pause overflow-hidden">
+  <div class="flex items-center gap-6">
+    <div class="flex-shrink-0 pl-6 hidden md:flex items-center gap-2">
+      <span class="relative flex h-2 w-2">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-500 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
+      </span>
+      <span class="text-xs font-semibold uppercase tracking-wider text-primary-700">Live · oggi</span>
+    </div>
+    <div class="flex-1 overflow-hidden">
+      <div class="marquee">
+        <?php
+        $live = [
+          ['Anna L.', 'Centro Estetico Iris', '5★', '"Esperienza top, le ragazze sono bravissime!"', '12 min fa'],
+          ['Marco R.', 'Capelli & Co Milano', '5★', '"Taglio perfetto, servizio impeccabile."', '34 min fa'],
+          ['Giulia T.', 'Trattoria Da Maria', '5★', '"Cibo eccezionale, torno presto!"', '1 h fa'],
+          ['Luca B.', 'Studio Dentistico Bianchi', '5★', '"Professionalità e gentilezza, consigliato."', '2 h fa'],
+          ['Sara M.', 'Glam Beauty Lounge', '5★', '"Coccole pure, mi sono sentita una regina."', '3 h fa'],
+          ['Paolo V.', 'Barber Shop Centrale', '5★', '"Atmosfera vintage, taglio impeccabile."', '4 h fa'],
+        ];
+        // duplico per loop infinito
+        foreach (array_merge($live, $live) as $r): ?>
+          <div class="flex items-center gap-3 bg-white border border-line rounded-full px-4 py-2 flex-shrink-0">
+            <div class="grid place-items-center w-7 h-7 rounded-full bg-mint text-primary-700 text-xs font-bold flex-shrink-0">
+              <?= strtoupper(substr($r[0],0,1) . substr(explode(' ', $r[0])[1] ?? '',0,1)) ?>
+            </div>
+            <span class="stars text-sm">★★★★★</span>
+            <span class="text-sm text-body whitespace-nowrap"><?= $r[3] ?></span>
+            <span class="text-xs text-muted whitespace-nowrap">— <?= $r[1] ?> · <?= $r[4] ?></span>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────  PRIMA / DOPO  ───────────────── -->
+<section id="prima-dopo" class="relative py-24 md:py-32 overflow-hidden">
+  <!-- Background "Google Maps" stilizzato -->
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, #EEF4EB 0%, #E4EEDF 100%);"></div>
+    <svg class="absolute inset-0 w-full h-full opacity-70" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <!-- "blocchi verdi" parchi -->
+      <rect x="80" y="100" width="180" height="140" rx="6" fill="#D5E5CB"/>
+      <rect x="900" y="80" width="220" height="120" rx="6" fill="#D5E5CB"/>
+      <rect x="500" y="600" width="280" height="140" rx="6" fill="#D5E5CB"/>
+      <!-- "blocchi blu" laghi -->
+      <ellipse cx="1050" cy="500" rx="160" ry="110" fill="#CFE2EC"/>
+      <ellipse cx="180" cy="650" rx="140" ry="90" fill="#CFE2EC"/>
+      <!-- strade orizzontali -->
+      <line x1="0" y1="200" x2="1200" y2="200" stroke="#fff" stroke-width="14"/>
+      <line x1="0" y1="200" x2="1200" y2="200" stroke="#E5DAB5" stroke-width="2"/>
+      <line x1="0" y1="420" x2="1200" y2="420" stroke="#fff" stroke-width="20"/>
+      <line x1="0" y1="420" x2="1200" y2="420" stroke="#F4C400" stroke-width="3"/>
+      <line x1="0" y1="630" x2="1200" y2="630" stroke="#fff" stroke-width="10"/>
+      <!-- strade verticali -->
+      <line x1="320" y1="0" x2="320" y2="800" stroke="#fff" stroke-width="14"/>
+      <line x1="320" y1="0" x2="320" y2="800" stroke="#E5DAB5" stroke-width="2"/>
+      <line x1="640" y1="0" x2="640" y2="800" stroke="#fff" stroke-width="10"/>
+      <line x1="900" y1="0" x2="900" y2="800" stroke="#fff" stroke-width="16"/>
+      <line x1="900" y1="0" x2="900" y2="800" stroke="#F4C400" stroke-width="2"/>
+      <!-- strade diagonali sottili -->
+      <line x1="0" y1="0" x2="600" y2="800" stroke="#fff" stroke-width="6" opacity=".7"/>
+      <line x1="1200" y1="0" x2="600" y2="800" stroke="#fff" stroke-width="6" opacity=".5"/>
+      <!-- micro-pin -->
+      <g transform="translate(200,300)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
+      <g transform="translate(720,150)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
+      <g transform="translate(420,520)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
+      <g transform="translate(1000,360)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
+      <g transform="translate(280,720)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
+      <g transform="translate(820,680)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
+      <!-- Mascheratura ai bordi per fade -->
+    </svg>
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, #FAF9F5 90%);"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6">
+  <div class="text-center max-w-2xl mx-auto mb-14">
+    <span class="chip mb-5"><span class="dot"></span> Risultato visibile</span>
+    <h2 class="h-display text-4xl md:text-6xl">Il tuo Google. <span class="hl-cream">Prima e dopo.</span></h2>
+    <p class="mt-5 text-lg text-body">90 giorni di ReviewBoost, raccontati con la scheda Google del Centro Estetico Bellezza di Milano.</p>
+  </div>
+
+  <div class="relative grid md:grid-cols-2 gap-6 lg:gap-12 items-center">
+    <!-- PRIMA -->
+    <div class="relative rise d2">
+      <div class="absolute -top-3 left-6 z-10 bg-white border border-line text-xs font-semibold px-3 py-1 rounded-full text-muted">PRIMA</div>
+      <div class="gmaps-card before bg-white rounded-3xl border border-line shadow-soft overflow-hidden">
+        <!-- Photo header con pin -->
+        <div class="photo">
+          <svg class="gmaps-pin" viewBox="0 0 24 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12z" fill="#9CA3A0"/>
+            <circle cx="12" cy="12" r="5" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="p-5">
+          <div class="text-[11px] font-semibold uppercase tracking-wider text-muted">Centro Estetico</div>
+          <h3 class="h-display text-2xl mt-1">Centro Bellezza Milano</h3>
+          <div class="flex items-center gap-2 mt-2.5">
+            <span class="h-display text-xl text-yellow-700">4.1</span>
+            <div class="flex">
+              <span class="text-yellow-500">★</span><span class="text-yellow-500">★</span><span class="text-yellow-500">★</span><span class="text-yellow-500">★</span><span class="text-line">★</span>
+            </div>
+            <span class="text-sm text-muted">(28)</span>
+          </div>
+          <div class="text-sm text-muted mt-3 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+            Via Manzoni 12 · Aperto · 09:00 — 19:00
+          </div>
+          <div class="grid grid-cols-4 gap-2 mt-4">
+            <button class="text-xs text-blue-700 font-semibold py-2 border border-line rounded-lg hover:bg-bone">Indicazioni</button>
+            <button class="text-xs text-blue-700 font-semibold py-2 border border-line rounded-lg hover:bg-bone">Salva</button>
+            <button class="text-xs text-blue-700 font-semibold py-2 border border-line rounded-lg hover:bg-bone">Vicino</button>
+            <button class="text-xs text-blue-700 font-semibold py-2 border border-line rounded-lg hover:bg-bone">Invia</button>
+          </div>
+          <div class="mt-5 pt-4 border-t border-line">
+            <div class="text-xs text-muted mb-2">Ultima recensione</div>
+            <div class="flex items-center gap-2 text-xs text-muted">
+              <span class="text-yellow-500">★★★★</span><span class="text-line">★</span>
+              <span class="font-semibold">5 mesi fa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Stats sotto -->
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <div class="bg-white border border-line rounded-2xl p-4 text-center">
+          <div class="text-xs uppercase tracking-wider text-muted">Recensioni / mese</div>
+          <div class="h-display text-3xl mt-1 text-muted">~5</div>
+        </div>
+        <div class="bg-white border border-line rounded-2xl p-4 text-center">
+          <div class="text-xs uppercase tracking-wider text-muted">Posizione locale</div>
+          <div class="h-display text-3xl mt-1 text-muted">#9</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Freccia in mezzo -->
+    <div class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 items-center justify-center pointer-events-none">
+      <div class="bg-white rounded-full shadow-lift border border-line p-4">
+        <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- DOPO -->
+    <div class="relative rise d3">
+      <div class="absolute -top-3 left-6 z-10 bg-primary-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-soft">DOPO · 90 giorni</div>
+      <div class="absolute -top-4 -right-4 z-10 bg-cream border border-yellow-200 px-3 py-2 rounded-full shadow-soft transform rotate-6 hidden sm:block">
+        <span class="text-xs font-bold text-yellow-800">+128 recensioni</span>
+      </div>
+      <div class="gmaps-card after bg-white rounded-3xl border-2 border-primary-500 shadow-lift overflow-hidden ring-4 ring-primary-500/10">
+        <div class="photo">
+          <svg class="gmaps-pin" viewBox="0 0 24 32" fill="none">
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20s12-11 12-20c0-6.627-5.373-12-12-12z" fill="#0F8E5C"/>
+            <circle cx="12" cy="12" r="5" fill="#fff"/>
+          </svg>
+          <!-- sparkle stars sopra il pin -->
+          <span class="stars twinkle absolute text-base" style="top:18%; left:30%;">★</span>
+          <span class="stars twinkle absolute text-sm" style="top:25%; right:30%;">★</span>
+          <span class="stars twinkle absolute text-xs" style="top:35%; left:60%;">★</span>
+        </div>
+        <div class="p-5">
+          <div class="text-[11px] font-semibold uppercase tracking-wider text-primary-700">Centro Estetico</div>
+          <h3 class="h-display text-2xl mt-1">Centro Bellezza Milano</h3>
+          <div class="flex items-center gap-2 mt-2.5">
+            <span class="h-display text-xl text-yellow-700">4.8</span>
+            <div class="flex">
+              <span class="text-yellow-500 twinkle">★</span><span class="text-yellow-500 twinkle">★</span><span class="text-yellow-500 twinkle">★</span><span class="text-yellow-500 twinkle">★</span><span class="text-yellow-500 twinkle">★</span>
+            </div>
+            <span class="text-sm text-muted">(156)</span>
+            <span class="text-xs text-primary-600 font-semibold ml-1">▲ +0.7</span>
+          </div>
+          <div class="text-sm text-muted mt-3 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8 2 5 5 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-4-3-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+            Via Manzoni 12 · Aperto · 09:00 — 19:00
+          </div>
+          <div class="grid grid-cols-4 gap-2 mt-4">
+            <button class="text-xs text-primary-700 font-semibold py-2 border border-primary-100 bg-mint rounded-lg">Indicazioni</button>
+            <button class="text-xs text-primary-700 font-semibold py-2 border border-primary-100 bg-mint rounded-lg">Salva</button>
+            <button class="text-xs text-primary-700 font-semibold py-2 border border-primary-100 bg-mint rounded-lg">Vicino</button>
+            <button class="text-xs text-primary-700 font-semibold py-2 border border-primary-100 bg-mint rounded-lg">Invia</button>
+          </div>
+          <div class="mt-5 pt-4 border-t border-line">
+            <div class="text-xs text-muted mb-2">Ultima recensione</div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="stars">★★★★★</span>
+              <span class="font-semibold text-primary-600">2 ore fa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 grid grid-cols-2 gap-3">
+        <div class="bg-mint border border-primary-100 rounded-2xl p-4 text-center">
+          <div class="text-xs uppercase tracking-wider text-primary-700">Recensioni / mese</div>
+          <div class="h-display text-3xl mt-1 text-primary-700">~70</div>
+        </div>
+        <div class="bg-mint border border-primary-100 rounded-2xl p-4 text-center">
+          <div class="text-xs uppercase tracking-wider text-primary-700">Posizione locale</div>
+          <div class="h-display text-3xl mt-1 text-primary-700">#1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quote sotto -->
+  <div class="mt-16 max-w-2xl mx-auto text-center">
+    <div class="stars text-2xl mb-4">★★★★★</div>
+    <p class="font-display text-2xl md:text-3xl leading-snug text-ink">
+      "Da 4.1 a 4.8 in tre mesi. La gente ci trova prima, e questo per noi <span class="hl-mint">vale ogni euro speso</span>."
+    </p>
+    <p class="mt-4 text-sm text-muted">— Laura Marchesi · Titolare, Centro Bellezza Milano</p>
+  </div>
+  </div><!-- /max-w-6xl wrapper aggiunto per il bg Maps -->
+</section>
+
+<!-- ─────────────────  GROWTH CHART DRAMATIC  ───────────────── -->
+<section class="bg-gradient-to-b from-white via-mint/30 to-white border-y border-line py-24">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="chip mb-5"><span class="dot"></span> 90 giorni in un grafico</span>
+      <h2 class="h-display text-4xl md:text-5xl">La curva che <span class="hl-cream">i tuoi concorrenti</span> non hanno.</h2>
+    </div>
+
+    <div class="card p-8 md:p-12 shadow-soft relative overflow-hidden">
+      <!-- Asse Y label -->
+      <div class="flex items-end justify-between mb-3 text-xs text-muted">
+        <span class="font-semibold uppercase tracking-wider">Recensioni Google al mese</span>
+        <span class="font-semibold uppercase tracking-wider">Centro Bellezza · 2026</span>
+      </div>
+
+      <div class="relative h-72 md:h-80">
+        <!-- Linee orizzontali grid -->
+        <div class="absolute inset-0 flex flex-col justify-between">
+          <?php for ($i = 0; $i < 5; $i++): ?>
+            <div class="border-t border-line2 relative">
+              <span class="absolute -left-1 -top-2 text-[10px] text-soft font-mono"><?= 80 - $i*20 ?></span>
+            </div>
+          <?php endfor; ?>
+        </div>
+
+        <!-- SVG curva -->
+        <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 320">
+          <!-- Area sotto la curva -->
+          <defs>
+            <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0F8E5C" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0F8E5C" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Path area: piatta bassa, poi sale ripida -->
+          <path d="M 0 290 L 100 285 L 200 280 L 300 275 L 350 270 L 400 240 L 450 200 L 520 160 L 600 120 L 680 90 L 760 65 L 840 50 L 920 40 L 1000 35 L 1000 320 L 0 320 Z" fill="url(#grad)"/>
+          <!-- Linea della curva -->
+          <path d="M 0 290 L 100 285 L 200 280 L 300 275 L 350 270 L 400 240 L 450 200 L 520 160 L 600 120 L 680 90 L 760 65 L 840 50 L 920 40 L 1000 35"
+                fill="none" stroke="#0F8E5C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Punto inizio "Inizia ReviewBoost" -->
+          <circle cx="350" cy="270" r="6" fill="#fff" stroke="#0F8E5C" stroke-width="3"/>
+          <circle cx="350" cy="270" r="14" fill="#0F8E5C" fill-opacity="0.15"/>
+          <line x1="350" y1="270" x2="350" y2="200" stroke="#0F8E5C" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+          <!-- Punto finale -->
+          <circle cx="1000" cy="35" r="8" fill="#0F8E5C"/>
+          <circle cx="1000" cy="35" r="16" fill="#0F8E5C" fill-opacity="0.2"/>
+        </svg>
+
+        <!-- Badge "Inizia ReviewBoost" -->
+        <div class="absolute" style="left: 33%; top: 38%;">
+          <div class="bg-ink text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-lift whitespace-nowrap">
+            <span class="text-cream">▼</span> Inizia ReviewBoost
+          </div>
+        </div>
+
+        <!-- Etichetta inizio "5 / mese" -->
+        <div class="absolute left-2 bottom-1">
+          <div class="text-xs">
+            <div class="font-semibold text-muted">~5 / mese</div>
+            <div class="text-[10px] text-soft">Prima</div>
+          </div>
+        </div>
+
+        <!-- Etichetta finale "70 / mese" -->
+        <div class="absolute right-0 -top-2">
+          <div class="text-right">
+            <div class="font-display text-3xl text-primary-600 font-semibold">70 / mese</div>
+            <div class="text-xs text-primary-700 font-semibold">▲ +1300% in 90 giorni</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Asse X label -->
+      <div class="flex justify-between mt-3 text-[11px] text-muted font-mono">
+        <span>Gen</span><span>Feb</span><span>Mar</span><span class="text-primary-600 font-semibold">Apr · ↑ start</span><span>Mag</span><span>Giu</span><span>Lug</span><span>Ago</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ─────────────────  SOCIAL PROOF / LOGOS  ───────────────── -->
-<section class="border-y border-line bg-bone">
+<section class="border-b border-line bg-bone">
   <div class="max-w-6xl mx-auto px-6 py-10">
     <p class="text-center text-sm text-muted font-medium mb-6">Scelto da centri estetici, parrucchieri, ristoranti e studi medici in tutta Italia</p>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 items-center justify-items-center opacity-70">
@@ -132,57 +485,8 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
   </div>
 </section>
 
-<!-- ─────────────────  PROBLEMA / SOLUZIONE  ───────────────── -->
-<section class="max-w-6xl mx-auto px-6 py-24 md:py-32 grid lg:grid-cols-2 gap-16 items-center">
-  <div>
-    <span class="chip mb-5"><span class="dot"></span> Il problema</span>
-    <h2 class="h-display text-4xl md:text-5xl mb-6">
-      I tuoi clienti escono <span class="hl-cream">contenti</span>.<br>
-      Ma su Google non scrivono niente.
-    </h2>
-    <p class="text-lg text-body leading-relaxed">
-      Lo sai bene: la gente quando è soddisfatta non dice nulla. Quando è arrabbiata corre a scrivere. Risultato? Il tuo Google appare peggio di quello che sei davvero — e perdi i clienti che ti cercavano online.
-    </p>
-    <ul class="mt-7 space-y-3 text-body">
-      <li class="flex items-start gap-3">
-        <span class="grid place-items-center w-5 h-5 rounded-full bg-red-100 text-red-600 mt-0.5 text-xs font-bold flex-shrink-0">×</span>
-        Chiedere a voce è imbarazzante e non funziona
-      </li>
-      <li class="flex items-start gap-3">
-        <span class="grid place-items-center w-5 h-5 rounded-full bg-red-100 text-red-600 mt-0.5 text-xs font-bold flex-shrink-0">×</span>
-        Mandare l'SMS a mano è una rottura
-      </li>
-      <li class="flex items-start gap-3">
-        <span class="grid place-items-center w-5 h-5 rounded-full bg-red-100 text-red-600 mt-0.5 text-xs font-bold flex-shrink-0">×</span>
-        Quando arriva una recensione brutta, è già troppo tardi
-      </li>
-    </ul>
-  </div>
-
-  <div class="bg-mint rounded-3xl p-10 border border-primary-100 relative overflow-hidden">
-    <div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-500/10 rounded-full blur-3xl"></div>
-    <span class="chip bg-white border-primary-100 mb-5"><span class="dot"></span> La soluzione</span>
-    <h3 class="h-display text-3xl md:text-4xl mb-5 leading-tight">
-      Un click, un WhatsApp, una recensione.
-    </h3>
-    <p class="text-body leading-relaxed mb-6">
-      ReviewBoost gira la cosa. Ogni mattina la receptionist apre l'app, vede chi è venuto ieri, e con un click manda a tutti un sondaggino via WhatsApp. <span class="text-ink font-semibold">Chi è soddisfatto va su Google. Chi non lo è, scrive solo a te.</span>
-    </p>
-    <div class="bg-white rounded-2xl p-5 border border-line">
-      <div class="flex items-start gap-3">
-        <div class="grid place-items-center w-9 h-9 rounded-full bg-[#25D366] text-white flex-shrink-0">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4 7.94 7.94 0 0 0 4.1 12a7.9 7.9 0 0 0 1.05 3.95L4 20l4.18-1.1a7.93 7.93 0 0 0 3.87 1h.01a7.94 7.94 0 0 0 7.95-7.95 7.9 7.9 0 0 0-2.41-5.63z"/></svg>
-        </div>
-        <div class="text-sm text-body leading-relaxed">
-          "Ciao Anna! Grazie di essere passata oggi 💚 Ci dai un feedback in 10 secondi? <span class="text-primary-600 font-semibold">link.it/r/bellezza</span>"
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ─────────────────  COME FUNZIONA  ───────────────── -->
-<section id="come-funziona" class="bg-bone py-24 md:py-32 border-y border-line">
+<section id="come-funziona" class="bg-bone py-24 md:py-32 border-b border-line">
   <div class="max-w-6xl mx-auto px-6">
     <div class="text-center max-w-2xl mx-auto mb-16">
       <span class="chip mb-5"><span class="dot"></span> Come funziona</span>
@@ -203,7 +507,7 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
       <article class="card p-8 relative">
         <div class="absolute top-7 right-7 font-display text-6xl text-primary-100 leading-none">02</div>
         <div class="w-12 h-12 rounded-2xl bg-mint grid place-items-center text-primary-600 mb-6">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"/></svg>
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4 7.94 7.94 0 0 0 4.1 12a7.9 7.9 0 0 0 1.05 3.95L4 20l4.18-1.1a7.93 7.93 0 0 0 3.87 1h.01a7.94 7.94 0 0 0 7.95-7.95 7.9 7.9 0 0 0-2.41-5.63z"/></svg>
         </div>
         <h3 class="font-display text-xl font-semibold mb-3">Lei clicca</h3>
         <p class="text-body text-sm leading-relaxed">Bottone WhatsApp accanto a ogni nome. Si apre la chat con il messaggio già scritto. Lei lo invia.</p>
@@ -212,7 +516,7 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
       <article class="card p-8 relative">
         <div class="absolute top-7 right-7 font-display text-6xl text-primary-100 leading-none">03</div>
         <div class="w-12 h-12 rounded-2xl bg-mint grid place-items-center text-primary-600 mb-6">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.32.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .8l3 7.5 8.2.6-6.3 5.3 2 8L12 17.7 5.1 22.2l2-8L.8 8.9l8.2-.6z"/></svg>
         </div>
         <h3 class="font-display text-xl font-semibold mb-3">Recensioni a 5 stelle</h3>
         <p class="text-body text-sm leading-relaxed">I clienti soddisfatti vanno su Google. Quelli scontenti scrivono solo a te, in privato.</p>
@@ -251,6 +555,106 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
         </div>
       </div>
     <?php endforeach; ?>
+  </div>
+</section>
+
+<!-- ─────────────────  MOCKUP IPHONE — SONDAGGIO  ───────────────── -->
+<section class="relative py-24 md:py-32 overflow-hidden">
+  <div class="absolute inset-0 -z-10 bg-gradient-to-br from-cream/40 via-white to-mint/40"></div>
+  <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <!-- Copy a sx -->
+    <div>
+      <span class="chip mb-5"><span class="dot"></span> Lato cliente</span>
+      <h2 class="h-display text-4xl md:text-5xl mb-6">Quello che <span class="hl-mint">ricevono i tuoi clienti</span>.</h2>
+      <p class="text-lg text-body leading-relaxed mb-6">Una pagina semplicissima, brandizzata col tuo logo. Cinque stelline. Niente registrazione, niente app, niente fatica. Si apre direttamente da WhatsApp.</p>
+      <ul class="space-y-3 mb-8">
+        <li class="flex items-start gap-3">
+          <span class="grid place-items-center w-6 h-6 rounded-full bg-mint text-primary-600 mt-0.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="text-body"><strong class="text-ink">5 stelle</strong> → bottone "Lascia recensione su Google" + il tuo regalo</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="grid place-items-center w-6 h-6 rounded-full bg-mint text-primary-600 mt-0.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="text-body"><strong class="text-ink">4 stelle</strong> → commento opzionale che vedi solo tu</span>
+        </li>
+        <li class="flex items-start gap-3">
+          <span class="grid place-items-center w-6 h-6 rounded-full bg-mint text-primary-600 mt-0.5 flex-shrink-0">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+          <span class="text-body"><strong class="text-ink">1–3 stelle</strong> → modulo di feedback privato + alert email a te</span>
+        </li>
+      </ul>
+      <p class="text-sm text-muted">Tempo medio per il cliente: <strong class="text-ink">10 secondi</strong>. Tasso di completamento: <strong class="text-primary-600">73%</strong>.</p>
+    </div>
+
+    <!-- Mockup iPhone -->
+    <div class="flex justify-center relative">
+      <!-- decorative pin sparsi -->
+      <span class="stars twinkle absolute text-lg" style="top:5%; left:8%;">★</span>
+      <span class="stars twinkle absolute text-2xl" style="top:25%; right:5%;">★</span>
+      <span class="stars twinkle absolute text-base" style="bottom:20%; left:0;">★</span>
+
+      <div class="relative">
+        <!-- iPhone frame -->
+        <div class="w-[300px] md:w-[340px] aspect-[9/19] bg-ink rounded-[3rem] p-3 shadow-lift relative">
+          <!-- Notch -->
+          <div class="absolute top-3 left-1/2 -translate-x-1/2 w-32 h-7 bg-ink rounded-b-2xl z-10"></div>
+          <div class="absolute top-5 left-1/2 -translate-x-1/2 w-20 h-3 bg-black rounded-full z-20"></div>
+          <!-- Screen -->
+          <div class="w-full h-full bg-white rounded-[2.4rem] overflow-hidden flex flex-col">
+            <div class="bg-mint border-b border-primary-100 pt-10 pb-5 px-5 text-center">
+              <div class="grid place-items-center w-12 h-12 rounded-2xl bg-primary-500 text-white mx-auto mb-2 shadow-soft">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M12 .8l3 7.5 8.2.6-6.3 5.3 2 8L12 17.7 5.1 22.2l2-8L.8 8.9l8.2-.6z"/></svg>
+              </div>
+              <div class="text-[10px] uppercase tracking-widest text-primary-700 font-semibold">Centro Estetico</div>
+              <div class="font-display font-semibold text-lg leading-tight">Bellezza Milano</div>
+            </div>
+            <div class="flex-1 px-5 py-6 flex flex-col items-center justify-center">
+              <h3 class="font-display text-xl font-semibold text-center mb-1">Come è andata oggi?</h3>
+              <p class="text-xs text-muted text-center mb-6">Ciao Anna! Ci dai un feedback in 10 secondi?</p>
+
+              <div class="flex gap-1.5 mb-7">
+                <span class="text-3xl text-yellow-400 twinkle">★</span>
+                <span class="text-3xl text-yellow-400 twinkle">★</span>
+                <span class="text-3xl text-yellow-400 twinkle">★</span>
+                <span class="text-3xl text-yellow-400 twinkle">★</span>
+                <span class="text-3xl text-yellow-400 twinkle">★</span>
+              </div>
+
+              <div class="bg-mint border border-primary-100 rounded-2xl p-4 w-full text-center mb-3">
+                <p class="text-xs text-primary-700 font-semibold mb-2">🎁 Per te oggi</p>
+                <p class="text-sm font-display font-semibold">10% di sconto sul prossimo trattamento</p>
+              </div>
+
+              <button class="w-full bg-primary-500 hover:bg-primary-700 text-white font-semibold text-sm py-3 rounded-xl flex items-center justify-center gap-2 shadow-soft">
+                <svg viewBox="0 0 48 48" class="w-4 h-4"><path fill="#fff" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#fff" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#fff" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#fff" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                Lascia recensione su Google
+              </button>
+              <p class="text-[10px] text-muted mt-3 text-center">Si apre direttamente la tua scheda Google</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card che esce dal phone (recensione che parte) -->
+        <div class="hidden md:block absolute -right-12 top-1/3 bg-white border border-line rounded-2xl p-3 shadow-lift transform rotate-3 w-52">
+          <div class="flex items-center gap-2 mb-1">
+            <div class="w-7 h-7 rounded-full bg-mint text-primary-700 grid place-items-center text-[10px] font-bold">AR</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[11px] font-semibold truncate">Anna R.</div>
+              <div class="stars text-[10px]">★★★★★</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-body leading-snug">"Servizio top, le ragazze sono bravissime. Tornerò!"</p>
+          <div class="text-[9px] text-primary-600 font-semibold mt-1.5 flex items-center gap-1">
+            <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .8l3 7.5 8.2.6-6.3 5.3 2 8L12 17.7 5.1 22.2l2-8L.8 8.9l8.2-.6z"/></svg>
+            su Google · 1 min fa
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
