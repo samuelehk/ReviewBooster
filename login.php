@@ -31,30 +31,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 layout_head('Accedi');
 ?>
 
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-sm p-8 mt-8">
-  <h1 class="text-2xl font-bold mb-6">Accedi all'area riservata</h1>
+<section class="relative min-h-[calc(100vh-160px)] flex items-center justify-center px-6 py-20">
+  <div class="absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_30%,transparent_100%)]"></div>
+  <div class="absolute inset-0 radial-spot opacity-60"></div>
 
-  <?php if ($error): ?>
-    <div class="bg-red-50 text-red-800 border border-red-200 rounded p-3 text-sm mb-4"><?= htmlspecialchars($error) ?></div>
-  <?php endif; ?>
-
-  <form method="post" action="/login.php" class="space-y-4">
-    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
-    <div>
-      <label class="block text-sm font-medium mb-1">Email</label>
-      <input type="email" name="email" required autofocus value="<?= htmlspecialchars($email) ?>" class="w-full border-gray-300 rounded p-2 border">
+  <div class="relative w-full max-w-md">
+    <div class="text-center mb-8 rise d1">
+      <div class="chip mx-auto mb-4"><span class="dot pulse-dot"></span>Area riservata</div>
+      <h1 class="h-display text-3xl md:text-4xl">Bentornato.</h1>
+      <p class="text-muted mt-2 text-sm">Accedi per gestire il tuo centro.</p>
     </div>
-    <div>
-      <label class="block text-sm font-medium mb-1">Password</label>
-      <input type="password" name="password" required class="w-full border-gray-300 rounded p-2 border">
-    </div>
-    <button class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded font-medium">Accedi</button>
-  </form>
 
-  <div class="mt-6 pt-4 border-t text-center">
-    <p class="text-xs text-gray-500">Sei un nuovo centro?</p>
-    <a href="/register.php" class="text-sm text-brand-700 hover:text-brand-800 underline">Registra il tuo centro →</a>
+    <div class="card-soft p-7 shadow-card rise d2">
+      <?php if ($error): ?>
+        <div class="mb-5 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-start gap-2">
+          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <?= htmlspecialchars($error) ?>
+        </div>
+      <?php endif; ?>
+
+      <form method="post" action="/login.php" class="space-y-4">
+        <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Email</label>
+          <input type="email" name="email" required autofocus value="<?= htmlspecialchars($email) ?>" placeholder="tu@centro.it">
+        </div>
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Password</label>
+          <input type="password" name="password" required placeholder="••••••••">
+        </div>
+        <button class="btn-primary w-full justify-center mt-2">
+          Accedi
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/></svg>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-5 border-t border-edge text-center">
+        <p class="text-xs font-mono uppercase tracking-widest text-faint mb-2">Sei un nuovo centro?</p>
+        <a href="/register.php" class="text-sm text-accent-500 hover:text-accent-400 font-medium inline-flex items-center gap-1.5">
+          Registra il tuo centro
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/></svg>
+        </a>
+      </div>
+    </div>
   </div>
-</div>
+</section>
 
 <?php layout_foot();

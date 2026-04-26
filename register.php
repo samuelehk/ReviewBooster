@@ -71,43 +71,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 layout_head('Registra il tuo centro');
 ?>
 
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-sm p-8 mt-4">
-  <h1 class="text-2xl font-bold mb-2">Registra il tuo centro</h1>
-  <p class="text-gray-600 text-sm mb-6">14 giorni gratis. Carta di credito richiesta nel passaggio successivo.</p>
+<section class="relative min-h-[calc(100vh-160px)] flex items-center justify-center px-6 py-16">
+  <div class="absolute inset-0 grid-bg [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_30%,transparent_100%)]"></div>
+  <div class="absolute inset-0 radial-spot opacity-60"></div>
 
-  <?php if ($error): ?>
-    <div class="bg-red-50 text-red-800 border border-red-200 rounded p-3 text-sm mb-4"><?= htmlspecialchars($error) ?></div>
-  <?php endif; ?>
+  <div class="relative w-full max-w-lg">
+    <div class="text-center mb-8 rise d1">
+      <div class="chip mx-auto mb-4"><span class="dot pulse-dot"></span>Step 1 di 2 · Registrazione</div>
+      <h1 class="h-display text-3xl md:text-4xl">Crea il tuo centro.</h1>
+      <p class="text-muted mt-2 text-sm">14 giorni gratis. La carta serve solo nel passaggio successivo.</p>
+    </div>
 
-  <form method="post" class="space-y-4">
-    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
-    <div>
-      <label class="block text-sm font-medium mb-1">Nome attività</label>
-      <input name="business_name" required value="<?= htmlspecialchars($values['business_name']) ?>" class="w-full border-gray-300 rounded p-2 border" placeholder="Es. Centro Estetico Bellezza">
-    </div>
-    <div>
-      <label class="block text-sm font-medium mb-1">Slug pubblico (per il link sondaggio)</label>
-      <input name="slug" required value="<?= htmlspecialchars($values['slug']) ?>" class="w-full border-gray-300 rounded p-2 border" placeholder="centro-bellezza">
-      <p class="text-xs text-gray-500 mt-1">Solo lettere, numeri e trattini. Il link sarà /r/&lt;slug&gt;.</p>
-    </div>
-    <div>
-      <label class="block text-sm font-medium mb-1">Il tuo nome</label>
-      <input name="name" value="<?= htmlspecialchars($values['name']) ?>" class="w-full border-gray-300 rounded p-2 border">
-    </div>
-    <div>
-      <label class="block text-sm font-medium mb-1">Email</label>
-      <input type="email" name="email" required value="<?= htmlspecialchars($values['email']) ?>" class="w-full border-gray-300 rounded p-2 border">
-    </div>
-    <div>
-      <label class="block text-sm font-medium mb-1">Password (min 8 caratteri)</label>
-      <input type="password" name="password" required minlength="8" class="w-full border-gray-300 rounded p-2 border">
-    </div>
-    <button class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded font-medium">Continua</button>
-  </form>
+    <div class="card-soft p-7 shadow-card rise d2">
+      <?php if ($error): ?>
+        <div class="mb-5 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-start gap-2">
+          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/></svg>
+          <?= htmlspecialchars($error) ?>
+        </div>
+      <?php endif; ?>
 
-  <p class="text-sm text-gray-600 mt-4 text-center">
-    Hai già un account? <a href="/login.php" class="text-brand-700 underline">Accedi</a>
-  </p>
-</div>
+      <form method="post" class="space-y-4">
+        <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Nome attività</label>
+          <input name="business_name" required value="<?= htmlspecialchars($values['business_name']) ?>" placeholder="Centro Estetico Bellezza">
+        </div>
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Slug pubblico</label>
+          <div class="relative">
+            <input name="slug" required value="<?= htmlspecialchars($values['slug']) ?>" placeholder="centro-bellezza" class="pl-12">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 font-mono text-xs text-faint">/r/</span>
+          </div>
+          <p class="text-xs text-faint mt-1.5 font-mono">Solo lettere, numeri e trattini.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Il tuo nome</label>
+            <input name="name" value="<?= htmlspecialchars($values['name']) ?>" placeholder="Anna">
+          </div>
+          <div>
+            <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Email</label>
+            <input type="email" name="email" required value="<?= htmlspecialchars($values['email']) ?>" placeholder="anna@centro.it">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-widest text-muted mb-2">Password (min 8 caratteri)</label>
+          <input type="password" name="password" required minlength="8" placeholder="••••••••">
+        </div>
+        <button class="btn-primary w-full justify-center mt-2">
+          Continua al pagamento
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/></svg>
+        </button>
+      </form>
+
+      <div class="mt-6 pt-5 border-t border-edge text-center">
+        <p class="text-xs text-faint">Hai già un account? <a href="/login.php" class="text-accent-500 hover:text-accent-400 font-medium">Accedi</a></p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <?php layout_foot();
