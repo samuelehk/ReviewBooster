@@ -1,8 +1,19 @@
 <?php
 declare(strict_types=1);
 
-$configPath = __DIR__ . '/config.local.php';
-if (!file_exists($configPath)) {
+$candidates = [
+    __DIR__ . '/config.local.php',
+    '/home/u749757264/config-reviewbooster.php',
+];
+if ($env = getenv('REVIEWBOOST_CONFIG')) {
+    array_unshift($candidates, $env);
+}
+
+$configPath = null;
+foreach ($candidates as $c) {
+    if ($c && is_file($c)) { $configPath = $c; break; }
+}
+if (!$configPath) {
     http_response_code(500);
     exit('Configurazione mancante. Contatta l\'amministratore.');
 }
