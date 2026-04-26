@@ -53,9 +53,10 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
   <!-- Background: mappa stile Google Maps densa -->
   <div class="absolute inset-0 -z-10" aria-hidden="true">
     <?php render_map_bg(); ?>
-    <!-- Overlay gradient per leggibilità -->
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(250,249,245,.85) 0%, rgba(250,249,245,.7) 35%, rgba(250,249,245,.92) 70%, #fff 100%);"></div>
-    <div class="absolute inset-x-0 top-0 h-[500px] opacity-70" style="background-image: radial-gradient(50% 60% at 80% 0%, rgba(15,142,92,.18), transparent 70%), radial-gradient(40% 50% at 15% 30%, rgba(244,196,0,.12), transparent 70%);"></div>
+    <!-- Overlay leggero solo nei punti del testo per leggibilità (NON copre la mappa) -->
+    <div class="absolute inset-0" style="background: radial-gradient(ellipse 70% 55% at 50% 35%, rgba(255,255,255,.55) 0%, rgba(255,255,255,.25) 50%, transparent 80%), linear-gradient(180deg, transparent 60%, rgba(255,255,255,.4) 85%, #fff 100%);"></div>
+    <!-- Tinte di colore decorative -->
+    <div class="absolute inset-x-0 top-0 h-[500px] opacity-70 mix-blend-multiply" style="background-image: radial-gradient(50% 60% at 80% 0%, rgba(15,142,92,.10), transparent 70%), radial-gradient(40% 50% at 15% 30%, rgba(244,196,0,.08), transparent 70%);"></div>
   </div>
 
   <!-- decorative stars sparse -->
