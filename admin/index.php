@@ -3,6 +3,8 @@ require __DIR__ . '/../includes/auth.php';
 require __DIR__ . '/../includes/db.php';
 require __DIR__ . '/../includes/layout.php';
 
+if (!current_user()) { header('Location: /login.php'); exit; }
+
 $user = require_admin_area();
 $tenantId = (int)$user['tenant_id'];
 

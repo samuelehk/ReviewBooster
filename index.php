@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/includes/auth.php';
 require __DIR__ . '/includes/layout.php';
-layout_head('Più recensioni Google, ogni giorno');
+layout_head('Più recensioni Google, ogni giorno', true);
 ?>
 
 <section class="text-center py-16">
@@ -13,12 +13,11 @@ layout_head('Più recensioni Google, ogni giorno');
     ReviewBoost trasforma i tuoi clienti soddisfatti in recensioni Google. La tua receptionist clicca un bottone, parte un WhatsApp, il cliente lascia una recensione. Semplice.
   </p>
   <div class="mt-8 flex items-center justify-center gap-3">
-    <a href="/register.php" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-lg font-medium">
-      Inizia 14 giorni gratis
+    <a href="#come-funziona" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-lg font-medium">
+      Scopri come funziona
     </a>
-    <a href="#come-funziona" class="text-gray-700 hover:text-brand-700 px-4 py-3">Come funziona →</a>
   </div>
-  <p class="mt-3 text-sm text-gray-500">50€/mese dopo il trial · Disdici quando vuoi</p>
+  <p class="mt-3 text-sm text-gray-500">Per attivare il servizio chiama il numero <strong>+39 XXX XXX XXXX</strong></p>
 </section>
 
 <section id="come-funziona" class="grid md:grid-cols-3 gap-6 py-12">
@@ -46,10 +45,8 @@ layout_head('Più recensioni Google, ogni giorno');
 
 <section class="text-center py-12">
   <h2 class="text-3xl font-bold">Pronto a partire?</h2>
-  <p class="mt-3 text-gray-600">14 giorni gratis. Disdici quando vuoi.</p>
-  <a href="/register.php" class="inline-block mt-6 bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-lg font-medium">
-    Registra il mio centro
-  </a>
+  <p class="mt-3 text-gray-600">Chiamaci per attivare la prova gratuita di 14 giorni.</p>
+  <p class="mt-6 text-2xl font-bold text-brand-700">+39 XXX XXX XXXX</p>
 </section>
 
 <?php layout_foot();

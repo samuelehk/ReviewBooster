@@ -44,17 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $values['name'] ?: null,
                 'admin',
             ]);
+            $userId = (int)$pdo->lastInsertId();
 
             $pdo->commit();
 
             $_SESSION['user'] = [
-                'id' => (int)$pdo->lastInsertId(),
+                'id' => $userId,
                 'tenant_id' => $tenantId,
                 'email' => $values['email'],
                 'name' => $values['name'] ?: null,
                 'role' => 'admin',
             ];
-            header('Location: /admin/');
+            header('Location: /checkout.php?welcome=1');
             exit;
         } catch (RuntimeException $e) {
             $pdo->rollBack();
@@ -70,9 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 layout_head('Registra il tuo centro');
 ?>
 
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-sm p-8">
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-sm p-8 mt-4">
   <h1 class="text-2xl font-bold mb-2">Registra il tuo centro</h1>
-  <p class="text-gray-600 text-sm mb-6">14 giorni gratis. Niente carta richiesta in fase di test.</p>
+  <p class="text-gray-600 text-sm mb-6">14 giorni gratis. Carta di credito richiesta nel passaggio successivo.</p>
 
   <?php if ($error): ?>
     <div class="bg-red-50 text-red-800 border border-red-200 rounded p-3 text-sm mb-4"><?= htmlspecialchars($error) ?></div>
@@ -101,7 +102,7 @@ layout_head('Registra il tuo centro');
       <label class="block text-sm font-medium mb-1">Password (min 8 caratteri)</label>
       <input type="password" name="password" required minlength="8" class="w-full border-gray-300 rounded p-2 border">
     </div>
-    <button class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded font-medium">Crea account</button>
+    <button class="w-full bg-brand-600 hover:bg-brand-700 text-white py-2.5 rounded font-medium">Continua</button>
   </form>
 
   <p class="text-sm text-gray-600 mt-4 text-center">

@@ -1,5 +1,5 @@
 <?php
-function layout_head(string $title = 'ReviewBoost'): void {
+function layout_head(string $title = 'ReviewBoost', bool $marketing = false): void {
     $u = effective_user();
     $imp = impersonating_as();
     ?><!doctype html>
@@ -27,7 +27,7 @@ tailwind.config = { theme: { extend: { colors: { brand: { 50:'#f0fdf4',100:'#dcf
       ReviewBoost
     </a>
     <nav class="flex items-center gap-4 text-sm">
-      <?php if ($u): ?>
+      <?php if ($u && !$marketing): ?>
         <?php if (($u['role'] ?? null) === 'super_admin' && !$imp): ?>
           <a href="/super/" class="text-gray-700 hover:text-brand-700">Super Admin</a>
         <?php else: ?>
@@ -36,9 +36,6 @@ tailwind.config = { theme: { extend: { colors: { brand: { 50:'#f0fdf4',100:'#dcf
         <span class="text-gray-500">|</span>
         <span class="text-gray-600"><?= htmlspecialchars($u['email']) ?></span>
         <a href="/logout.php" class="text-gray-700 hover:text-brand-700">Esci</a>
-      <?php else: ?>
-        <a href="/login.php" class="text-gray-700 hover:text-brand-700">Accedi</a>
-        <a href="/register.php" class="bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded">Registrati</a>
       <?php endif; ?>
     </nav>
   </div>
