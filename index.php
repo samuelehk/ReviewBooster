@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/includes/auth.php';
 require __DIR__ . '/includes/layout.php';
+require __DIR__ . '/includes/map_bg.php';
 layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
 ?>
 
@@ -49,8 +50,13 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
 
 <!-- ─────────────────  HERO  ───────────────── -->
 <section class="relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-b from-sage via-white to-white -z-10"></div>
-  <div class="absolute inset-x-0 top-0 h-[500px] -z-10 opacity-60" style="background-image: radial-gradient(50% 60% at 80% 0%, rgba(15,142,92,.18), transparent 70%), radial-gradient(40% 50% at 15% 30%, rgba(244,196,0,.12), transparent 70%);"></div>
+  <!-- Background: mappa stile Google Maps densa -->
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
+    <?php render_map_bg(); ?>
+    <!-- Overlay gradient per leggibilità -->
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(250,249,245,.85) 0%, rgba(250,249,245,.7) 35%, rgba(250,249,245,.92) 70%, #fff 100%);"></div>
+    <div class="absolute inset-x-0 top-0 h-[500px] opacity-70" style="background-image: radial-gradient(50% 60% at 80% 0%, rgba(15,142,92,.18), transparent 70%), radial-gradient(40% 50% at 15% 30%, rgba(244,196,0,.12), transparent 70%);"></div>
+  </div>
 
   <!-- decorative stars sparse -->
   <div class="absolute inset-0 pointer-events-none overflow-hidden -z-10">
@@ -63,9 +69,9 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
   <div class="max-w-6xl mx-auto px-6 pt-16 pb-12 md:pt-24 md:pb-16 text-center relative">
     <span class="chip rise d1"><span class="dot"></span> Operativo per oltre 200 centri in Italia</span>
 
-    <h1 class="h-display mt-7 text-5xl sm:text-6xl md:text-7xl lg:text-[5.4rem] max-w-4xl mx-auto rise d2">
-      Più recensioni Google.<br>
-      <span class="hl-mint">Ogni giorno.</span> <span class="text-primary-500">Senza fatica.</span>
+    <h1 class="h-display mt-7 text-5xl sm:text-6xl md:text-7xl lg:text-[5.4rem] max-w-4xl mx-auto rise d2 leading-[1.02]">
+      Più <span class="font-script text-primary-500">stelle</span> sulla tua scheda Google.<br>
+      <span class="font-script">Ogni giorno.</span> Senza <span class="font-script">fatica</span>.
     </h1>
 
     <p class="mt-7 text-lg md:text-xl text-body max-w-2xl mx-auto leading-relaxed rise d3">
@@ -94,10 +100,47 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
 
   <!-- Hero mockup prodotto -->
   <div class="max-w-5xl mx-auto px-6 pb-16 rise d6 relative">
-    <!-- Badge "+1 recensione" floating -->
-    <div class="absolute -top-2 right-2 md:right-12 z-10 hidden sm:flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-line shadow-lift pulse-ring">
+    <!-- Pillola "+128 recensioni" in alto a sinistra -->
+    <div class="absolute -top-3 left-2 md:left-6 z-10 hidden sm:flex items-center gap-2 bg-mint border border-primary-100 px-3 py-1.5 rounded-full shadow-soft">
+      <svg class="w-4 h-4 text-primary-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .8l3 7.5 8.2.6-6.3 5.3 2 8L12 17.7 5.1 22.2l2-8L.8 8.9l8.2-.6z"/></svg>
+      <span class="text-xs font-bold text-primary-700">+128 recensioni · ultimi 90gg</span>
+    </div>
+
+    <!-- Badge "+1 recensione" floating in alto a destra -->
+    <div class="absolute -top-2 right-2 md:right-6 z-10 flex items-center gap-2 bg-white px-3 py-2 rounded-full border border-line shadow-lift pulse-ring">
       <span class="grid place-items-center w-6 h-6 rounded-full bg-primary-500 text-white text-xs">★</span>
       <span class="text-xs font-semibold">+1 recensione 5★ · ora</span>
+    </div>
+
+    <!-- Card flottante in basso a sx — "Da 4.1 a 4.8" -->
+    <div class="absolute -bottom-4 -left-4 md:-left-10 z-10 hidden md:block bg-white rounded-2xl border border-line shadow-lift p-3 max-w-[230px] transform -rotate-3">
+      <div class="flex items-center gap-2 mb-1.5">
+        <div class="grid place-items-center w-6 h-6 rounded-full bg-primary-500 text-white">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+        </div>
+        <span class="text-xs font-bold text-ink">Punteggio Google</span>
+      </div>
+      <div class="flex items-baseline gap-2">
+        <span class="text-xs text-muted line-through">4.1</span>
+        <span class="text-xs text-muted">→</span>
+        <span class="font-display text-2xl font-semibold text-primary-600">4.8</span>
+        <span class="text-xs font-semibold text-primary-600">▲ +0.7</span>
+      </div>
+      <div class="flex items-center gap-0.5 mt-1">
+        <span class="stars text-xs">★★★★★</span>
+        <span class="text-[10px] text-muted ml-1">156 recensioni</span>
+      </div>
+    </div>
+
+    <!-- Card flottante in basso a destra — "Posizione locale" -->
+    <div class="absolute -bottom-4 -right-2 md:-right-10 z-10 hidden md:block bg-cream border border-yellow-200 rounded-2xl shadow-lift p-3 max-w-[200px] transform rotate-2">
+      <div class="text-[10px] font-bold uppercase tracking-widest text-yellow-800 mb-1">Posizione locale</div>
+      <div class="flex items-baseline gap-1.5">
+        <span class="text-xs text-muted line-through">#9</span>
+        <span class="text-xs text-muted">→</span>
+        <span class="font-display text-3xl font-bold text-yellow-800">#1</span>
+      </div>
+      <div class="text-[10px] text-yellow-800/80 mt-0.5">"Centro estetico Milano"</div>
     </div>
 
     <div class="bg-white rounded-2xl border border-line shadow-lift overflow-hidden">
@@ -210,42 +253,9 @@ layout_head('Più recensioni Google a 5 stelle, ogni giorno', true);
 
 <!-- ─────────────────  PRIMA / DOPO  ───────────────── -->
 <section id="prima-dopo" class="relative py-24 md:py-32 overflow-hidden">
-  <!-- Background "Google Maps" stilizzato -->
   <div class="absolute inset-0 -z-10" aria-hidden="true">
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, #EEF4EB 0%, #E4EEDF 100%);"></div>
-    <svg class="absolute inset-0 w-full h-full opacity-70" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-      <!-- "blocchi verdi" parchi -->
-      <rect x="80" y="100" width="180" height="140" rx="6" fill="#D5E5CB"/>
-      <rect x="900" y="80" width="220" height="120" rx="6" fill="#D5E5CB"/>
-      <rect x="500" y="600" width="280" height="140" rx="6" fill="#D5E5CB"/>
-      <!-- "blocchi blu" laghi -->
-      <ellipse cx="1050" cy="500" rx="160" ry="110" fill="#CFE2EC"/>
-      <ellipse cx="180" cy="650" rx="140" ry="90" fill="#CFE2EC"/>
-      <!-- strade orizzontali -->
-      <line x1="0" y1="200" x2="1200" y2="200" stroke="#fff" stroke-width="14"/>
-      <line x1="0" y1="200" x2="1200" y2="200" stroke="#E5DAB5" stroke-width="2"/>
-      <line x1="0" y1="420" x2="1200" y2="420" stroke="#fff" stroke-width="20"/>
-      <line x1="0" y1="420" x2="1200" y2="420" stroke="#F4C400" stroke-width="3"/>
-      <line x1="0" y1="630" x2="1200" y2="630" stroke="#fff" stroke-width="10"/>
-      <!-- strade verticali -->
-      <line x1="320" y1="0" x2="320" y2="800" stroke="#fff" stroke-width="14"/>
-      <line x1="320" y1="0" x2="320" y2="800" stroke="#E5DAB5" stroke-width="2"/>
-      <line x1="640" y1="0" x2="640" y2="800" stroke="#fff" stroke-width="10"/>
-      <line x1="900" y1="0" x2="900" y2="800" stroke="#fff" stroke-width="16"/>
-      <line x1="900" y1="0" x2="900" y2="800" stroke="#F4C400" stroke-width="2"/>
-      <!-- strade diagonali sottili -->
-      <line x1="0" y1="0" x2="600" y2="800" stroke="#fff" stroke-width="6" opacity=".7"/>
-      <line x1="1200" y1="0" x2="600" y2="800" stroke="#fff" stroke-width="6" opacity=".5"/>
-      <!-- micro-pin -->
-      <g transform="translate(200,300)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
-      <g transform="translate(720,150)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
-      <g transform="translate(420,520)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
-      <g transform="translate(1000,360)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
-      <g transform="translate(280,720)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
-      <g transform="translate(820,680)"><path d="M0 0 C-8 -10 -8 -22 0 -28 C8 -22 8 -10 0 0 Z" fill="#0F8E5C"/><circle cx="0" cy="-22" r="4" fill="#fff"/></g>
-      <!-- Mascheratura ai bordi per fade -->
-    </svg>
-    <div class="absolute inset-0" style="background: radial-gradient(ellipse 80% 70% at 50% 50%, transparent 30%, #FAF9F5 90%);"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-bone via-white to-bone"></div>
+    <div class="absolute inset-0 opacity-50" style="background-image: radial-gradient(60% 50% at 20% 0%, rgba(15,142,92,.08), transparent 50%), radial-gradient(50% 50% at 90% 90%, rgba(244,196,0,.08), transparent 50%);"></div>
   </div>
 
   <div class="max-w-6xl mx-auto px-6">

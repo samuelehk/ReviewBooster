@@ -12,7 +12,7 @@ function layout_head(string $title = 'ReviewBoost', bool $marketing = false): vo
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:wght@300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Plus+Jakarta+Sans:wght@300..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -59,6 +59,7 @@ tailwind.config = {
   html, body { background: #FFFFFF; color: var(--ink); }
   body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01', 'ss03'; }
   .font-display { font-family: 'Bricolage Grotesque', Georgia, serif; font-optical-sizing: auto; letter-spacing: -0.025em; }
+  .font-script  { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; letter-spacing: -0.005em; font-weight: 400; }
 
   .h-display { font-family: 'Bricolage Grotesque', Georgia, serif; font-weight: 500; letter-spacing: -0.035em; line-height: 1.02; font-optical-sizing: auto; }
 
@@ -141,32 +142,68 @@ tailwind.config = {
   a.in-link::after { content:''; position:absolute; left:0; right:0; bottom:-2px; height:1px; background: currentColor; transform-origin: left; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
   a.in-link:hover::after { transform: scaleX(0); transform-origin: right; }
 
-  /* ─── FAB WhatsApp (fisso in basso a destra, su tutte le pagine) ─── */
-  .fab-wa {
-    position: fixed; bottom: 1.4rem; right: 1.4rem; z-index: 60;
-    display: inline-flex; align-items: center; gap: .65rem;
-    background: #25D366; color: #fff;
-    padding: .85rem 1.3rem .85rem 1rem; border-radius: 999px;
-    font-weight: 600; font-size: .95rem;
-    box-shadow: 0 12px 28px -8px rgba(37,211,102,.55), 0 2px 6px rgba(0,0,0,.12);
-    transition: background .15s, transform .2s, box-shadow .25s;
+  /* ─── FAB WhatsApp con bolla popup (in stile competitor) ─── */
+  .fab-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 60; display: flex; align-items: center; gap: .75rem; }
+  .fab-bubble {
+    background: #fff; border-radius: 14px;
+    padding: .75rem 2.2rem .75rem 1rem;
+    box-shadow: 0 12px 28px -8px rgba(0,0,0,.18), 0 2px 6px rgba(0,0,0,.08);
+    position: relative; max-width: 260px;
+    animation: bubbleIn .6s cubic-bezier(.2,.8,.2,1) .8s both;
   }
-  .fab-wa:hover { background: #1faa54; transform: translateY(-2px); box-shadow: 0 18px 34px -8px rgba(37,211,102,.65), 0 2px 6px rgba(0,0,0,.15); }
-  .fab-wa .icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 999px; background: rgba(255,255,255,.18); }
-  .fab-wa .label { display: none; }
-  @media (min-width: 640px) { .fab-wa .label { display: inline; } }
+  .fab-bubble .b-title { font-weight: 700; font-size: .95rem; color: var(--ink); line-height: 1.25; }
+  .fab-bubble .b-sub   { font-size: .82rem; color: var(--muted); margin-top: 1px; }
+  .fab-bubble::after {
+    content:''; position: absolute; right: -6px; top: 50%; transform: translateY(-50%) rotate(45deg);
+    width: 12px; height: 12px; background: #fff;
+    box-shadow: 2px -2px 4px -2px rgba(0,0,0,.05);
+  }
+  .fab-bubble .b-close {
+    position: absolute; top: 4px; right: 4px;
+    width: 22px; height: 22px; border-radius: 999px; border: none;
+    background: var(--bone); color: var(--muted);
+    display: grid; place-items: center; cursor: pointer; font-size: 12px; line-height: 1;
+    transition: background .15s, color .15s;
+  }
+  .fab-bubble .b-close:hover { background: var(--line); color: var(--ink); }
 
-  /* anello pulsante */
-  .fab-wa::before {
-    content: ''; position: absolute; inset: 0; border-radius: inherit;
+  .fab-circle {
+    width: 64px; height: 64px; border-radius: 999px;
+    background: #25D366; color: #fff;
+    display: grid; place-items: center;
+    box-shadow: 0 14px 30px -8px rgba(37,211,102,.6), 0 2px 6px rgba(0,0,0,.12);
+    transition: background .15s, transform .2s;
+    position: relative;
+  }
+  .fab-circle:hover { background: #1faa54; transform: scale(1.04); }
+  .fab-circle::before {
+    content:''; position: absolute; inset: 0; border-radius: inherit;
     box-shadow: 0 0 0 0 rgba(37,211,102,.55);
     animation: fabPulse 2.4s infinite;
     pointer-events: none;
   }
+  .fab-badge {
+    position: absolute; top: -2px; right: -2px;
+    min-width: 22px; height: 22px; padding: 0 6px;
+    border-radius: 999px; background: #EF4444; color: #fff;
+    font-size: 12px; font-weight: 700;
+    display: grid; place-items: center;
+    box-shadow: 0 0 0 3px #fff;
+  }
   @keyframes fabPulse {
-    0% { box-shadow: 0 0 0 0 rgba(37,211,102,.55); }
-    70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+    0%   { box-shadow: 0 0 0 0 rgba(37,211,102,.55); }
+    70%  { box-shadow: 0 0 0 18px rgba(37,211,102,0); }
     100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  }
+  @keyframes bubbleIn {
+    from { opacity: 0; transform: translateX(8px) scale(.96); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  .fab-wrap[data-hidden="true"] .fab-bubble { display: none; }
+
+  /* Mobile: nascondo bolla, lascio solo cerchio */
+  @media (max-width: 640px) {
+    .fab-bubble { display: none; }
   }
 
   /* Bumper dei contenuti per non far coprire dal FAB */
@@ -253,13 +290,18 @@ function layout_foot(): void {
   </div>
 </footer>
 
-<!-- FAB WhatsApp · fisso, presente su tutte le pagine -->
-<a class="fab-wa" href="https://wa.me/390000000000?text=Ciao%2C%20vorrei%20attivare%20ReviewBoost" target="_blank" rel="noopener" aria-label="Chatta su WhatsApp">
-  <span class="icon">
-    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4 7.94 7.94 0 0 0 4.1 12a7.9 7.9 0 0 0 1.05 3.95L4 20l4.18-1.1a7.93 7.93 0 0 0 3.87 1h.01a7.94 7.94 0 0 0 7.95-7.95 7.9 7.9 0 0 0-2.41-5.63zm-5.55 12.22h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.49.65.66-2.42-.16-.25a6.58 6.58 0 0 1-1.01-3.5 6.6 6.6 0 0 1 11.27-4.66 6.55 6.55 0 0 1 1.93 4.66 6.6 6.6 0 0 1-6.59 6.58zm3.62-4.93c-.2-.1-1.18-.58-1.36-.65-.18-.07-.31-.1-.45.1-.13.2-.51.65-.63.78-.12.13-.23.15-.43.05-.2-.1-.83-.31-1.59-.98-.59-.52-.99-1.17-1.1-1.37-.12-.2-.01-.31.09-.41.09-.09.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.45-1.08-.62-1.48-.16-.39-.33-.34-.45-.35-.12 0-.25-.02-.38-.02-.13 0-.35.05-.53.25-.18.2-.7.68-.7 1.66 0 .98.71 1.92.81 2.05.1.13 1.41 2.15 3.41 3.01.48.21.85.33 1.14.42.48.15.91.13 1.26.08.38-.06 1.18-.48 1.34-.95.17-.47.17-.86.12-.95-.05-.08-.18-.13-.38-.23z"/></svg>
-  </span>
-  <span class="label">Chatta con noi</span>
-</a>
+<!-- FAB WhatsApp · bolla popup + cerchio con pulse + badge -->
+<div class="fab-wrap" id="fab-wa" data-hidden="false">
+  <div class="fab-bubble">
+    <button class="b-close" onclick="document.getElementById('fab-wa').dataset.hidden='true'" aria-label="Chiudi">×</button>
+    <div class="b-title">Scrivici su WhatsApp</div>
+    <div class="b-sub">Rispondiamo in 2 min</div>
+  </div>
+  <a class="fab-circle" href="https://wa.me/390000000000?text=Ciao%2C%20vorrei%20attivare%20ReviewBoost" target="_blank" rel="noopener" aria-label="Chatta su WhatsApp">
+    <svg class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4 7.94 7.94 0 0 0 4.1 12a7.9 7.9 0 0 0 1.05 3.95L4 20l4.18-1.1a7.93 7.93 0 0 0 3.87 1h.01a7.94 7.94 0 0 0 7.95-7.95 7.9 7.9 0 0 0-2.41-5.63zm-5.55 12.22h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.49.65.66-2.42-.16-.25a6.58 6.58 0 0 1-1.01-3.5 6.6 6.6 0 0 1 11.27-4.66 6.55 6.55 0 0 1 1.93 4.66 6.6 6.6 0 0 1-6.59 6.58zm3.62-4.93c-.2-.1-1.18-.58-1.36-.65-.18-.07-.31-.1-.45.1-.13.2-.51.65-.63.78-.12.13-.23.15-.43.05-.2-.1-.83-.31-1.59-.98-.59-.52-.99-1.17-1.1-1.37-.12-.2-.01-.31.09-.41.09-.09.2-.23.3-.35.1-.12.13-.2.2-.33.07-.13.03-.25-.02-.35-.05-.1-.45-1.08-.62-1.48-.16-.39-.33-.34-.45-.35-.12 0-.25-.02-.38-.02-.13 0-.35.05-.53.25-.18.2-.7.68-.7 1.66 0 .98.71 1.92.81 2.05.1.13 1.41 2.15 3.41 3.01.48.21.85.33 1.14.42.48.15.91.13 1.26.08.38-.06 1.18-.48 1.34-.95.17-.47.17-.86.12-.95-.05-.08-.18-.13-.38-.23z"/></svg>
+    <span class="fab-badge">1</span>
+  </a>
+</div>
 
 </body>
 </html>
